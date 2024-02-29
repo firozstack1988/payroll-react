@@ -11,7 +11,7 @@ const Navbar=()=>{
     const navigat=useNavigate();
     const loginUser=localStorage.getItem("loggedUser");
 function logout(){
-    const result=axios.post("http://localhost:9005/users/logout","")
+    const result=axios.post("http://localhost:9006/users/logout","")
         .then((result)=>{           
             if(result.data.success=='Successfully Logout') {
                 Swal.fire(result.data.success);  
@@ -37,6 +37,9 @@ function addLeave(){
 function addAllowance(){
     navigat("/Allowance"); 
 }
+function showAllowanceList(){
+    navigat("/AllowanceList"); 
+}
 function addBranch(){
     navigat("/BranchConfig");  
 }
@@ -49,6 +52,9 @@ function addHoliday(){
 function salaryGen(){
     navigat("/SalaryProcess"); 
 }
+function fundTran(){
+    navigat("/FundTransfer"); 
+}
     return(
         <div>
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -57,6 +63,7 @@ function salaryGen(){
         
         <NavDropdown title="Salary Disbursement">
         <NavDropdown.Item onClick={salaryGen}>Salary Generate</NavDropdown.Item> 
+        <NavDropdown.Item onClick={fundTran}>Fund Transfer</NavDropdown.Item> 
         </NavDropdown>
         <NavDropdown title="Employee">
             <NavDropdown.Item onClick={addEmployees}>Add Employee</NavDropdown.Item>
@@ -68,6 +75,7 @@ function salaryGen(){
         </NavDropdown>
         <NavDropdown title="Configuration">
             <NavDropdown.Item onClick={addAllowance}>Allowance Setup</NavDropdown.Item>
+            <NavDropdown.Item onClick={showAllowanceList}>Salary Allowance</NavDropdown.Item>
             <NavDropdown.Item onClick={addBranch}>Branch Setup</NavDropdown.Item>
             <NavDropdown.Item onClick={addHoliday}>Monthly Holiday Setup</NavDropdown.Item>
             <NavDropdown.Item onClick={userAdd}>Add User</NavDropdown.Item>
