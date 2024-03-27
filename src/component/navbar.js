@@ -7,14 +7,38 @@ import { NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import {useEffect,useState} from "react";
+import { BASE_URL } from "./config";
+
 const Navbar=()=>{
     const navigat=useNavigate();
     const loginUser=localStorage.getItem("loggedUser");
+   
+  const [auth,setAuth]= useState(false);
+    
+ useEffect(()=>{
+    axios.get("")
+    .then((result)=>{   
+    if(result.data=='success'){
+        setAuth(true);
+        Swal.fire("You are authorized"); 
+    }      
+    else{
+        setAuth(false);
+        Swal.fire("You are not authorized"); 
+        navigat("/"); 
+    }
+       }).catch((err) => {
+        console.log(err)
+    }) 
+   },[]);
+
+
 function logout(){
-    const result=axios.post("http://localhost:9006/users/logout","")
+    const result=axios.post("http://localhost:5000/api/users/logout","")
         .then((result)=>{           
-            if(result.data.success=='Successfully Logout') {
-                Swal.fire(result.data.success);  
+            if(result.data=='Successfully Logout') {
+                Swal.fire(result.data);  
                 navigat("/");    
             }    
               
@@ -23,37 +47,42 @@ function logout(){
         }) 
 }
 function addEmployees(){
+    navigat("/EmployeeList"); 
+}
+function newEmployeeAdd(){
     navigat("/AddEmployee"); 
 }
 function userAdd(){
-    navigat("/AddUsers"); 
+    navigat("/UserList"); 
 }
-function empList(){
-    navigat("/EmployeeList"); 
-}
+ 
 function addLeave(){
     navigat("/Leave"); 
 }
 function addAllowance(){
-    navigat("/Allowance"); 
-}
-function showAllowanceList(){
     navigat("/AllowanceList"); 
 }
+ 
 function addBranch(){
-    navigat("/BranchConfig");  
+    navigat("/BranchList");  
 }
 function empTransfer(){
     navigat("/EmpTransfer"); 
 }
 function addHoliday(){
-    navigat("/AddHolidays");  
+    navigat("/HolidayList");  
 }
 function salaryGen(){
     navigat("/SalaryProcess"); 
 }
 function fundTran(){
     navigat("/FundTransfer"); 
+}
+function changePassword(){
+    navigat("/UserPassChange"); 
+}
+function addLeavePolicy(){
+    navigat("/LeavePolicyList"); 
 }
     return(
         <div>
@@ -66,19 +95,21 @@ function fundTran(){
         <NavDropdown.Item onClick={fundTran}>Fund Transfer</NavDropdown.Item> 
         </NavDropdown>
         <NavDropdown title="Employee">
-            <NavDropdown.Item onClick={addEmployees}>Add Employee</NavDropdown.Item>
-            <NavDropdown.Item onClick={empList}>Employee List</NavDropdown.Item>
+            <NavDropdown.Item onClick={addEmployees}> Employee List</NavDropdown.Item>
+            <NavDropdown.Item onClick={newEmployeeAdd}>Add Employee</NavDropdown.Item>
             <NavDropdown.Item onClick={empTransfer}>Employee Transfer</NavDropdown.Item>
         </NavDropdown>
         <NavDropdown title="Leave Information">
             <NavDropdown.Item onClick={addLeave}>Leave Entry</NavDropdown.Item>
+            <NavDropdown.Item onClick={addLeavePolicy}>Leave Policy</NavDropdown.Item>
         </NavDropdown>
         <NavDropdown title="Configuration">
             <NavDropdown.Item onClick={addAllowance}>Allowance Setup</NavDropdown.Item>
-            <NavDropdown.Item onClick={showAllowanceList}>Salary Allowance</NavDropdown.Item>
+            
             <NavDropdown.Item onClick={addBranch}>Branch Setup</NavDropdown.Item>
             <NavDropdown.Item onClick={addHoliday}>Monthly Holiday Setup</NavDropdown.Item>
             <NavDropdown.Item onClick={userAdd}>Add User</NavDropdown.Item>
+            <NavDropdown.Item onClick={changePassword}>User Password Change</NavDropdown.Item>
         </NavDropdown>
         <NavDropdown title={loginUser}>
             <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
