@@ -16,6 +16,20 @@ import EmpTransfer from './empTransfer';
 import AddHolidays from './addHolidays';
 import SalaryProcess from './salaryProcess';
 import MonthlySalarySheet from './monthlySalarySheet'
+import FundTransfer from './fundTransfer';
+import AllowanceList from './allowanceList';
+import UserPassChange from './userPassChange';
+import EditAllowance from './editAllowance';
+import BranchList from './branchList';
+import EditBranch from './editBranch';
+import HolidayList from './holidayList';
+import EditHoliday from './editHoliday';
+import UserList from './userList';
+import EditUser from './editUser';
+import EditEmployee from './editEmployee';
+import LeavePolicy from './leavePolicy';
+import LeavePolicyList from './leavePolicyList';
+import EditLeavePolicy from './editLeavePolicy';
 
 function App() {
   return (
@@ -25,15 +39,37 @@ function App() {
           <Route exact path="/navbar" element={<Navbar/>}/>
           <Route exact path="/empDashboard" element={<EmpDashboard/>}/>
           <Route exact path="/addUsers" element={<AddUser/>}/>
+          <Route exact path="/userList" element={<UserList/>}/>
+          <Route exact path="/editUser/:id" element={<EditUser/>}/>
+
           <Route exact path="/addEmployee" element={<AddEmployee/>}/>
           <Route exact path="/employeeList" element={<EmployeeList/>}/>
+          <Route exact path="/editEmployee/:id" element={<EditEmployee/>}/>
+
           <Route exact path="/leave" element={<Leave/>}/>
+          <Route exact path="/leavePolicyList" element={<LeavePolicyList/>}/>
+          <Route exact path="/editLeavePolicy/:id" element={<EditLeavePolicy/>}/>
+
+
           <Route exact path="/allowance" element={<Allowance/>}/>
+          <Route exact path="/editAllowance/:id" element={<EditAllowance/>}/>
+
+          <Route exact path="/editBranch/:id" element={<EditBranch/>}/>
           <Route exact path="/branchConfig" element={<BranchConfig/>}/>
+          <Route exact path="/branchList" element={<BranchList/>}/>
+
           <Route exact path="/empTransfer" element={<EmpTransfer/>}/>
+
           <Route exact path="/addHolidays" element={<AddHolidays/>}/>
+          <Route exact path="/holidayList" element={<HolidayList/>}/>
+          <Route exact path="/editHoliday/:id" element={<EditHoliday/>}/>
+
           <Route exact path="/salaryProcess" element={<SalaryProcess/>}/>
           <Route exact path="/monthlySalarySheet" element={<MonthlySalarySheet/>}/>
+          <Route exact path="/fundTransfer" element={<FundTransfer/>}/>
+          <Route exact path="/allowanceList" element={<AllowanceList/>}/>
+          <Route exact path="/userPassChange" element={<UserPassChange/>}/>
+          
           <Route exact path="/" element={<Login />} />
         </Routes>
       </Router>
