@@ -13,7 +13,9 @@ const responseData={
     DATA_FOUND:"Data found",
     UPDATE_SUCCESS:"Data successfully updated",
     UPDATE_FAILURE:"Data update failure",
-    DUPLICATE_EMPID:"Duplicate employee id not allowed"
+    DUPLICATE_EMPID:"Duplicate employee id not allowed",
+    STATUS_SUCCESS:"success",
+    STATUS_FAILURE:"failure"
  }
 
  module.exports= responseData;

@@ -3,23 +3,30 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Calendar from "react-calendar"
 import { useNavigate } from "react-router-dom";
+import responseData from "./response";
+import { BASE_URL } from "./config";
+import Navbar from "./navbar";
+
 const AddEmployee=()=>{
     const cors=require("cors");
     const navigat=useNavigate();
+    const loginUser=localStorage.getItem("loggedUser");
     const[employee,setEmployee]=useState({ 
+        createdby:loginUser,
+        empId:'',
         name:'',
         deptName:'',
         emailAddress:'',
         mobileNo:'',
         designation:'',
         branchCode:'',
-        basicAmt:''
+        basicAmt:'',
+        supervision:'',
     });
     const[result,setResult]=useState({
-        success:'',
-        errorMsg:'',
+        status:'',
+        message:'',
         content:'',
-        generatedSerial:''
     });
 
     const [errors, setErrors] = useState({});
@@ -55,19 +62,18 @@ const AddEmployee=()=>{
             validationerror.emailAddress="Invalid Email"; 
         }
 
-
         setErrors(validationerror);
         if(Object.keys(validationerror).length===0){
-            const result=axios.post("http://localhost:9006/employees/addEmployee",employee)
+            axios.post(BASE_URL+"employee",employee)
             .then((result)=>{ 
-                if(result.data.success=='Successfully Added') {
-                    Swal.fire(result.data.success);  
-                    navigat("/Navbar"); 
+                if(result.data.status==responseData.STATUS_SUCCESS) {
+                    Swal.fire(result.data.message); 
+                    navigat("/employeeList"); 
                 }
-                else{
-                    console.log(result.data.errorMsg);
-                    Swal.fire(result.data.errorMsg);   
-                }   
+                if(result.data.status==responseData.STATUS_FAILURE) 
+                    Swal.fire(result.data.message); 
+                if(result.data==responseData.DUPLICATE_EMPID) 
+                    Swal.fire(responseData.DUPLICATE_EMPID);    
                 
                }).catch((err) => {
                 console.log(err);
@@ -80,7 +86,8 @@ const AddEmployee=()=>{
                 mobileNo:'',
                 designation:'',
                 branchCode:'',
-                basicAmt:''
+                basicAmt:'',
+                supervision:''
             }); 
         }
                
@@ -93,7 +100,8 @@ const AddEmployee=()=>{
     } 
     
     return(    
-     
+     <div>
+         <div><Navbar/></div>
         <div className="container d-flex justify-content-center" >
         <form className="requires-validation" onSubmit={handleSubmit}>
        
@@ -153,14 +161,27 @@ const AddEmployee=()=>{
             <input className="form-control" type="text"  name="designation" value={employee.designation} onChange={handleOnchange}/>
             {errors.designation && <span>{errors.designation}</span>}
         </div>
+
+        <div className="col-md-20">
+            <label>Super Visor</label>            
+            <select className="form-select" onChange={handleOnchange} name="supervision" value={employee.supervision}>
+             <option value="">Select</option>
+             <option value="Manager">Manager</option>
+             <option value="Area Manager">Area Manager</option>
+             <option value="Director">Director</option>
+             <option value="Executive Director">Executive Director</option>
+             <option value="Zonal Manager">Zonal Manager</option>
+            </select>
+            {errors.supervision && <span>{errors.supervision}</span>}
+        </div>
          
          <div className="form-button mt-3">
-            <button id="submit" type="submit" onClick={handleSubmit} class="btn btn-primary">Add</button>   
+            <button id="submit" type="submit" onClick={handleSubmit} class="btn btn-primary">Submit</button>   
         </div>
         
         </form> 
         </div>
-              
+        </div>      
     );
 }
 
