@@ -30,6 +30,7 @@ import EditEmployee from './editEmployee';
 import LeavePolicy from './leavePolicy';
 import LeavePolicyList from './leavePolicyList';
 import EditLeavePolicy from './editLeavePolicy';
+import AdminDashboard from './adminDashboard';
 
 function App() {
   return (
@@ -69,6 +70,9 @@ function App() {
           <Route exact path="/fundTransfer" element={<FundTransfer/>}/>
           <Route exact path="/allowanceList" element={<AllowanceList/>}/>
           <Route exact path="/userPassChange" element={<UserPassChange/>}/>
+
+          <Route exact path="/adminDashboard/:id" element={<AdminDashboard/>}/>
+          <Route exact path="/empDashboard/:id" element={<EmpDashboard/>}/>
           
           <Route exact path="/" element={<Login />} />
         </Routes>

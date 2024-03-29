@@ -2,9 +2,11 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import React ,{useState,useRef, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "./config";
+import responseData from "./response";
 
 const Login=()=>{
-    const cors=require("cors");
+    axios.defaults.withCredentials = true
     const[users,setUsers]=useState({ 
         loginUser:'',
         password:''
@@ -28,23 +30,24 @@ const Login=()=>{
 
     const handleSubmit=(event)=>{
         event.preventDefault();
-        localStorage.setItem("loggedUser",users.loginUser);
-        const result=axios.post("http://localhost:9006/users/login",users)
-        .then((result)=>{           
-            if(result.data.success=='Successfully Login') {
-                Swal.fire(result.data.success); 
-                if(result.data.content.userRole=='USER'){
-                    navigat("/EmpDashboard");   
-                }
-                if(result.data.content.userRole=='ADMIN'){
-                    navigat("/Navbar"); 
-                }
-                
-            }
-            else{
-                Swal.fire(result.data.errorMsg);   
-            }
-              
+        const result=axios.post(BASE_URL+"users/login",users)
+        .then((result)=>{   
+        if(result.data.status==responseData.STATUS_SUCCESS){
+            localStorage.setItem("loggedUser",users.loginUser); 
+              if(result.data.content=="SUPER ADMIN")
+              navigat("/Navbar"); 
+              if(result.data.content=="BRANCH ADMIN")
+              navigat("/AdminDashboard/"+users.loginUser);
+              if(result.data.content=="WORKER")
+              navigat("/EmpDashboard/"+users.loginUser);
+              if(result.data.content=="AREA ADMIN")
+              navigat("/AdminDashboard/"+users.loginUser);
+
+            Swal.fire(result.data.message); 
+        }      
+        else{
+            Swal.fire(result.data.message); 
+        }
            }).catch((err) => {
             console.log(err)
         }) 

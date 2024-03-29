@@ -35,7 +35,7 @@ const Navbar=()=>{
 
 
 function logout(){
-    const result=axios.post("http://localhost:5000/api/users/logout","")
+    const result=axios.post(BASE_URL+"users/logout","")
         .then((result)=>{           
             if(result.data=='Successfully Logout') {
                 Swal.fire(result.data);  

@@ -7,18 +7,25 @@ import {useParams} from 'react-router-dom';
 import responseData from "./response";
 import { BASE_URL } from "./config";
 
-const EmpDashboard = () => {
+const AdminDashboard = () => {
   const navigat=useNavigate();
-  const {id}=useParams();
   const loginUser=localStorage.getItem("loggedUser");
   const [empList,setEmpList]=useState([]); 
-  
+  const {id}=useParams();
   const[result,setResult]=useState({
     success:'',
     errorMsg:'',
     content:''
    });
   
+   useEffect(()=>{
+    loadEmpList();
+    },[])
+
+const loadEmpList=async()=>{
+const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
+   setEmpList(result.data);
+  }
    function addLeave(){
     navigat("/Leave"); 
    }
@@ -28,33 +35,27 @@ const EmpDashboard = () => {
    function leaveInfo(){
     navigat("/LeaveInfo"); 
    }
-
-   useEffect(()=>{
-    loadEmpList();
-    },[])
-
-const loadEmpList=async()=>{
-const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
-   setEmpList(result.data);
-  }
+   function leaveAproval(){
+    navigat("/LeaveAproval"); 
+   }
 
   function logout(){
     const result=axios.post(BASE_URL+"users/logout","")
         .then((result)=>{           
-          if(result.data==responseData.LOGOUT) {
-            Swal.fire(responseData.LOGOUT);  
-            navigat("/");    
-        }     
+            if(result.data==responseData.LOGOUT) {
+                Swal.fire(responseData.LOGOUT);  
+                navigat("/");    
+            }     
            }).catch((err) => {
             console.log(err)
         }) 
-}
+     }
 
   return(
     <div>
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
     <div className="container-fluid">
-    <a className="navbar-brand" href="#">Employee Dashboard</a>
+    <a className="navbar-brand" href="#">Admin Dashboard</a>
     
     <NavDropdown title="Employee">
             <NavDropdown.Item onClick={empInfo}> Employement Information</NavDropdown.Item>
@@ -62,6 +63,7 @@ const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
     <NavDropdown title="Leave Information">
             <NavDropdown.Item onClick={addLeave}>Leave Entry</NavDropdown.Item>
             <NavDropdown.Item onClick={leaveInfo}>Leave Information</NavDropdown.Item>
+            <NavDropdown.Item onClick={leaveAproval}>Leave Aproval</NavDropdown.Item>
     </NavDropdown>
     <NavDropdown title={loginUser}>
             <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
@@ -72,7 +74,7 @@ const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
 			<table className="table border shadow">	 
 			 <thead>
                 <tr>
-                <th scope="col">Employee Id</th>
+                    <th scope="col">Employee Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Branch Code</th>
                     <th scope="col">Department</th>
@@ -105,4 +107,4 @@ const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
 ); 
 };
 
-export default EmpDashboard;
+export default AdminDashboard;
