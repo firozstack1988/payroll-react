@@ -5,12 +5,15 @@ import Calendar from "react-calendar"
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { BASE_URL } from "./config";
+import {useParams} from 'react-router-dom';
+import responseData from "./response";
 
 const Leave=()=>{
-    const cors=require("cors");
     const navigat=useNavigate();
+    const loginUser=localStorage.getItem("loggedUser");
     const[leave,setLeave]=useState({ 
-        employeeId:'',
+        employeeId:loginUser,
         leaveType:'',
         leaveReason:'',
         fromDate:'',
@@ -20,8 +23,6 @@ const Leave=()=>{
     const[result,setResult]=useState({
         success:'',
         errorMsg:'',
-        content:'',
-        generatedSerial:''
     });
 
     const [errors, setErrors] = useState({});
@@ -50,17 +51,15 @@ const Leave=()=>{
 
         setErrors(validationerror);
         if(Object.keys(validationerror).length===0){
-            const result=axios.post("http://localhost:9006/leaves/addLeave",leave)
+             axios.post(BASE_URL+"leave",leave)
             .then((result)=>{ 
-                if(result.data.success=='Successfully Added') {
-                    Swal.fire(result.data.success); 
-                    navigat("/Navbar"); 
+                if(result.data.status==responseData.STATUS_SUCCESS) {
+                    Swal.fire(result.data.message); 
+                    navigat("/LeaveInfo/"+loginUser); 
                 }
-                else{
-                    console.log(result.data.errorMsg);
-                    Swal.fire(result.data.errorMsg);   
-                }   
-                
+                if(result.data.status==responseData.STATUS_FAILURE) 
+                    Swal.fire(result.data.message); 
+
                }).catch((err) => {
                 console.log(err);
             })   
@@ -83,8 +82,7 @@ const Leave=()=>{
     }
  
  const handleFromDate=(e)=>{
-     setLeave({
-          ...leave,
+     setLeave({...leave,
           [e.target.name]:e.target.value});    
   }
    const handleToDate=(e)=>{
