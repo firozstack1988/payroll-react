@@ -56,12 +56,12 @@ const EditUser=()=>{
         if(Object.keys(validationerror).length===0){
             axios.post(BASE_URL+"users/modifyUser",users)
             .then((result)=>{           
-                if(result.data==responseData.UPDATE_SUCCESS) {
-                    Swal.fire(responseData.UPDATE_SUCCESS); 
+                if(result.data.status==responseData.STATUS_SUCCESS) {
+                    Swal.fire(result.data.message); 
                     navigat("/UserList"); 
                 }
-                if(result.data==responseData.UPDATE_FAILURE) 
-                    Swal.fire(responseData.UPDATE_FAILURE); 
+                if(result.data.status==responseData.STATUS_FAILURE) 
+                    Swal.fire(result.data.message); 
                     
                }).catch((err) => {
                 console.log(err)
@@ -107,9 +107,10 @@ const EditUser=()=>{
              <label>User Role</label>            
             <select className="form-select"  onChange={handleOnchange} name="userRole" value={users.userRole}>
              <option value="">Select</option>
-             <option value="ADMIN">ADMIN</option>
-             <option value="USER">USER</option>
-             <option value="SUPER">SUPER</option>
+             <option value="BRANCH ADMIN">BRANCH ADMIN</option>
+             <option value="AREA ADMIN">AREA ADMIN</option>
+             <option value="WORKER">WORKER</option>
+             <option value="SUPER ADMIN">SUPER ADMIN</option>
             </select>
         </div>
            

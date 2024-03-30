@@ -2,10 +2,14 @@ import React ,{useState,useRef}from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "./config";
+import responseData from "./response";
+
 const AddUser=()=>{
-    const cors=require("cors");
     const navigat=useNavigate();
+    const loginUserId=localStorage.getItem("loggedUser");
     const[users,setUsers]=useState({ 
+        createdBy:'loginUserId',
         loginUser:'',
         userName:'',
         password:'',
@@ -13,8 +17,8 @@ const AddUser=()=>{
         userRole:''
     });
     const[result,setResult]=useState({
-        success:'',
-        errorMsg:'',
+        status:'',
+        message:'',
         content:''
     });
    const [errors, setErrors] = useState({});
@@ -39,15 +43,15 @@ const AddUser=()=>{
         }
         setErrors(validationerror);
         if(Object.keys(validationerror).length===0){
-            const result=axios.post("http://localhost:9006/users/addUser",users)
+            const result=axios.post(BASE_URL+"users",users)
             .then((result)=>{           
-                if(result.data.success=='Successfully Added') {
-                    Swal.fire(result.data.success); 
+                if(result.data.status==responseData.STATUS_SUCCESS) {
+                    Swal.fire(result.data.message); 
+                    navigat("/UserList"); 
                 }
-                else{
-                    console.log(result.data.errorMsg);
-                    Swal.fire(result.data.errorMsg);   
-                } 
+                if(result.data.status==responseData.STATUS_FAILURE) 
+                    Swal.fire(result.data.message); 
+               
                }).catch((err) => {
                 console.log(err)
             }) 
@@ -59,7 +63,7 @@ const AddUser=()=>{
                 userRole:''
             });
         }
-        navigat("/Navbar"); 
+   
     } 
     const handleOnchange=(event)=>{
         setUsers({
@@ -96,9 +100,10 @@ const AddUser=()=>{
              <label>User Role</label>            
             <select className="form-select"  onChange={handleOnchange} name="userRole" value={users.userRole}>
              <option value="">Select</option>
-             <option value="ADMIN">ADMIN</option>
-             <option value="USER">USER</option>
-             <option value="SUPER">SUPER</option>
+             <option value="BRANCH ADMIN">BRANCH ADMIN</option>
+             <option value="AREA ADMIN">AREA ADMIN</option>
+             <option value="WORKER">WORKER</option>
+             <option value="SUPER ADMIN">SUPER ADMIN</option>
             </select>
         </div>
            

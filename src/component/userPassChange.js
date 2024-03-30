@@ -39,20 +39,11 @@ const UserPassChange=()=>{
         if(Object.keys(validationerror).length===0){
             const result=axios.post(BASE_URL+"users/passChange",passChange)
             .then((result)=>{ 
-            if(result.data==responseData.NEWPASSWORD_CONFIRMPASSWORD)
-                Swal.fire(responseData.NEWPASSWORD_CONFIRMPASSWORD); 
-
-            if(result.data==responseData.PASSWORD_SUCCESS_MSG)
-                Swal.fire(responseData.PASSWORD_SUCCESS_MSG);
-    
-            if(result.data==responseData.PASSWORD_MISMATCH)
-                Swal.fire(responseData.PASSWORD_MISMATCH);
-    
-            if(result.data==responseData.PASSWORD_FAILURE_MSG)
-                Swal.fire(responseData.PASSWORD_FAILURE_MSG);
-    
-            if(result.data==responseData.USER_ERROR)
-                Swal.fire(responseData.USER_ERROR);   
+                if(result.data.status==responseData.STATUS_SUCCESS) {
+                    Swal.fire(result.data.message); 
+                }
+                if(result.data.status==responseData.STATUS_FAILURE) 
+                    Swal.fire(result.data.message);   
                 
                }).catch((err) => {
                 console.log(err);
