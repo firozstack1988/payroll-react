@@ -26,7 +26,7 @@ const EmpDashboard = () => {
     navigat("/EmployementInfo"); 
    }
    function leaveInfo(){
-    navigat("/LeaveInfo"); 
+    navigat("/LeaveInfo/"+loginUser); 
    }
 
    useEffect(()=>{
@@ -34,8 +34,9 @@ const EmpDashboard = () => {
     },[])
 
 const loadEmpList=async()=>{
-const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
-   setEmpList(result.data);
+const result=await axios.get(BASE_URL+"employee/empDetail/"+id); 
+    setEmpList(result.data);
+    localStorage.setItem("loggedUserRole",result.data[0].user_role);
   }
 
   function logout(){
