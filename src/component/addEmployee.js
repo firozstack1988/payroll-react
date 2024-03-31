@@ -158,7 +158,15 @@ const AddEmployee=()=>{
 
         <div className="col-md-20">
             <label>Designation</label>
-            <input className="form-control" type="text"  name="designation" value={employee.designation} onChange={handleOnchange}/>
+            <select className="form-select" onChange={handleOnchange} name="designation" value={employee.designation}>
+             <option value="">Select</option>
+             <option value="BRANCH ADMIN">BRANCH ADMIN</option>
+             <option value="AREA ADMIN">AREA ADMIN</option>
+             <option value="SUPER ADMIN">SUPER ADMIN</option>
+             <option value="FIELD WORKER">FIELD WORKER</option>
+             <option value="AUDIT OFFICER">AUDIT OFFICER</option>
+             <option value="IT OFFICER">IT OFFICER</option>
+            </select>
             {errors.designation && <span>{errors.designation}</span>}
         </div>
 
@@ -166,11 +174,9 @@ const AddEmployee=()=>{
             <label>Super Visor</label>            
             <select className="form-select" onChange={handleOnchange} name="supervision" value={employee.supervision}>
              <option value="">Select</option>
-             <option value="Manager">Manager</option>
-             <option value="Area Manager">Area Manager</option>
-             <option value="Director">Director</option>
-             <option value="Executive Director">Executive Director</option>
-             <option value="Zonal Manager">Zonal Manager</option>
+             <option value="BRANCH ADMIN">BRANCH ADMIN</option>
+             <option value="AREA ADMIN">AREA ADMIN</option>
+             <option value="SUPER ADMIN">SUPER ADMIN</option>
             </select>
             {errors.supervision && <span>{errors.supervision}</span>}
         </div>
