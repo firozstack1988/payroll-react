@@ -6,11 +6,14 @@ import { NavDropdown } from "react-bootstrap";
 import {useParams} from 'react-router-dom';
 import responseData from "./response";
 import { BASE_URL } from "./config";
+import {Link} from 'react-router-dom';
+const moment = require("moment");
 
 const AdminDashboard = () => {
   const navigat=useNavigate();
   const loginUser=localStorage.getItem("loggedUser");
   const [empList,setEmpList]=useState([]); 
+  const [leaveData,setLeaveData]=useState([]); 
   const {id}=useParams();
   const[result,setResult]=useState({
     success:'',
@@ -19,13 +22,19 @@ const AdminDashboard = () => {
    });
   
    useEffect(()=>{
-    loadEmpList();
+    loadEmpInfo();
+    loadLeaveInfo();
     },[])
 
-const loadEmpList=async()=>{
-const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
+  const loadEmpInfo=async()=>{
+  const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
    setEmpList(result.data);
   }
+  const loadLeaveInfo=async()=>{
+     const result=await axios.get(BASE_URL+"leave/leaveAproved/"+id);
+     setLeaveData(result.data);
+  }
+
    function addLeave(){
     navigat("/Leave"); 
    }
@@ -96,9 +105,41 @@ const result=await axios.get(BASE_URL+"employee/empDetail/"+id);
                       <td>{emp.emp_designation}</td>
                   </tr>  
                 })
- 
                 }
-
+            </tbody>
+             </table>
+			</div>
+            <div className="py-4">		
+			<table className="table border shadow">	 
+			 <thead>
+                <tr>
+                    <th scope="col">Employee Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">From Date</th>
+                    <th scope="col">To Date</th>
+                    <th scope="col">Total days</th>
+                    <th scope="col">Leave Type</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Leave Status</th>
+                    <th scope="col">Comment</th>
+                </tr>
+             </thead>
+            <tbody>
+                {
+                  leaveData.map((d,index)=>{
+                    return <tr  key={index}> 
+                      <td>{d.employee_id}</td>                  
+                      <td>{d.name}</td>
+                      <td>{moment(d.from_date).format('YYYY-MM-DD')}</td>
+                      <td>{moment(d.to_date).format('YYYY-MM-DD')}</td>
+                      <td>{d.number_of_days}</td>
+                      <td>{d.leave_type}</td>
+                      <td>{d.leave_reason}</td>
+                      <td>{d.leave_status}</td>
+                      <td><Link to={`/leaveAproval/${d.employee_id}/${moment(d.from_date).format('YYYY-MM-DD')}/${moment(d.to_date).format('YYYY-MM-DD')}/${d.leave_type}`}>Aproval Submit</Link></td>
+                  </tr>  
+                })
+                }
             </tbody>
              </table>
 			</div>
