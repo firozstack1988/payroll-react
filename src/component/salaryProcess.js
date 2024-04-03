@@ -3,6 +3,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Calendar from "react-calendar"
 import { useNavigate } from "react-router-dom";
+import responseData from "./response";
+import { BASE_URL } from "./config";
 
 const SalaryProcess=()=>{
     const cors=require("cors");
@@ -34,31 +36,24 @@ const SalaryProcess=()=>{
         if(Object.keys(validationerror).length===0){
             localStorage.setItem("year",salaryProcess.year);
             localStorage.setItem("month",salaryProcess.month);
-            const result=axios.post("http://localhost:9006/salProcess/add",salaryProcess)
+            const result=axios.post(BASE_URL+"salaryProcess",salaryProcess)
             .then((result)=>{ 
-                if(result.data.success=='Successfully Added') {
-                    Swal.fire(result.data.success); 
-                    setSalaryProcess({ 
-                        month:'',
-                        year:''
-                    }); 
-                    navigat("/MonthlySalarySheet"); 
+                if(result.data.status==responseData.STATUS_SUCCESS) {
+                    Swal.fire(result.data.message); 
+                    navigat("/MonthlySalarySheet/"+salaryProcess.year+"/"+salaryProcess.month); 
                 }
-                else{
-                    setSalaryProcess({ 
-                        month:'',
-                        year:''
-                    }); 
-                    navigat("/MonthlySalarySheet"); 
-                    Swal.fire(result.data.errorMsg);   
-                }   
-                
+                if(result.data.status==responseData.STATUS_FAILURE) {
+                    Swal.fire(result.data.message); 
+                    navigat("/MonthlySalarySheet/"+salaryProcess.year+"/"+salaryProcess.month); 
+                }
                }).catch((err) => {
                 console.log(err);
             })   
-            
-        }
-               
+            setSalaryProcess({ 
+                month:'',
+                year:''
+            }); 
+        }         
     } 
     const handleOnchange=(event)=>{
         setSalaryProcess({
@@ -101,7 +96,7 @@ const SalaryProcess=()=>{
         </div>
     
          <div className="form-button mt-3">
-            <button id="submit" type="submit" onClick={handleSubmit} class="btn btn-primary">Add</button>   
+            <button id="submit" type="submit" onClick={handleSubmit} class="btn btn-primary">Generate Salary Sheet</button>   
         </div>
         
         </form> 

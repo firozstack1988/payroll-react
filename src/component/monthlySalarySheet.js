@@ -1,17 +1,15 @@
 import React,{useEffect,useState} from "react";
 import axios from "axios";
+import responseData from "./response";
+import { BASE_URL } from "./config";
+import { useNavigate } from "react-router-dom";
 
 const MonthlySalarySheet=()=>{
-    const cors=require("cors");
+    const navigat=useNavigate();
     const [salaryList,setSalaryList]=useState([]); 
    
     const year=localStorage.getItem("year");
     const month=localStorage.getItem("month");
-    
-    const[inputParam,setInputParam]=useState({ 
-        month:month,
-        year:year
-    });
     const[result,setResult]=useState({
       success:'',
       errorMsg:'',
@@ -22,17 +20,16 @@ const MonthlySalarySheet=()=>{
     },[])
 
     const loadSalaryList=async()=>{
-    
-    const result=await axios.post("http://localhost:9006/salProcess/salarySheet",inputParam);
-    setSalaryList(result.data.content);
+    const result=await axios.get(BASE_URL+"salaryProcess/"+year+"/"+month);
+    console.log(result.data);
+    setSalaryList(result.data);
     }
     
     return(
-		<div className="container">	
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+		<div  >	
+     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
         <div className="container-fluid">
-        <a className="navbar-brand" href="#">Monthly Salary Sheet</a>
-         
+       
        </div>
       </nav> 
 			<div className="py-4">		
@@ -56,17 +53,17 @@ const MonthlySalarySheet=()=>{
                 {
                 salaryList.map((sal,index)=>{
                   return <tr  key={index}> 
-                    <td>{sal.empId}</td>                  
-                    <td>{sal.empName}</td>
-                    <td>{sal.basicAmt}</td>
-                    <td>{sal.houseRentAmt}</td>
-                    <td>{sal.medicalAllowanceAmt}</td>
-                    <td>{sal.lunchAmt}</td>
-                    <td>{sal.transportAllowance}</td>
-                    <td>{sal.creditAllowanceAmt}</td>
-                    <td>{sal.cityAllowanceAmt}</td>
-                    <td>{sal.providentFundAmt}</td>
-                    <td>{sal.grossSalary}</td>
+                    <td>{sal.emp_id}</td>                  
+                    <td>{sal.emp_name}</td>
+                    <td>{sal.basic_amt}</td>
+                    <td>{sal.house_rent_amt}</td>
+                    <td>{sal.medical_allowance_amt}</td>
+                    <td>{sal.lunch_amt}</td>
+                    <td>{sal.transport_allowance}</td>
+                    <td>{sal.credit_allowancea_amt}</td>
+                    <td>{sal.city_allowance_amt}</td>
+                    <td>{sal.provident_fund_amt}</td>
+                    <td>{sal.gross_salary}</td>
                   </tr>  
                 })
  
@@ -75,6 +72,9 @@ const MonthlySalarySheet=()=>{
             </tbody>
              </table>
 			</div>
+      <div className="container d-flex justify-content-center">
+      <button onClick={() => navigat(-1)}>Go back</button>
+      </div>
 		</div>	
 	
     );
